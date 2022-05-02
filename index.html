@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonte Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet"> 
+    <!-- Acessando o arquivo CSS de estilos -->
+    <link href="css/style.css" rel="stylesheet"/>
+    <title>Sistema de Atendimento</title>
+</head>
+<body>
+    <div class="botoes">
+        <button class="senhaPref">Emitir senha Preferencial</button>
+        <button class="senhaCom">Emitir senha Comum</button>
+        <button class="senhaCanc">Cancelar senha</button>
+            <div id="custom-select" class="hide">
+                <select id="selectList">
+                    <option></option>
+                </select>
+                <button class="botOk">OK</button>
+            </div>
+        <button class="senhaConv">Convocar senha</button>
+    </div>
+
+    <div class="filaChamada">
+        <h2>Fila de Atendimento</h2>
+        <div id="fila"></div>
+    </div>
+
+    <div class="container">
+
+        <div id="clockDisplay" class="clock" onload="showTime()"></div>
+
+        <div class="painelChamada">
+            <h2>- Chamada -</h2>
+            <div id="telao"></div>
+        </div>
+    </div>
+</body>
+
+<script type="module" src="js/clock.js"></script>
+<script>
+    // Mapeando botoes 
+    var botPref = document.querySelector('.senhaPref');
+    var botCom = document.querySelector('.senhaCom');
+    var botCanc = document.querySelector('.senhaCanc');
+    var botConv = document.querySelector('.senhaConv');
+    // Monitora quantidade de senhas P e C
+    var clicC = 0;
+    var clicP = 0;
+    // Inicializa arrays de senhas P e C
+    const senhasC = [];
+    const senhasP = [];
+
+    // ***** EMISSAO DE SENHAS ****** //
+
+    //funcao generalizada p/ montar sequencia de senhas P ou C
+    function printFila(clic,senhas1,senhas2,prefixo1,prefixo2,add){
+        var nHTML = '';
+        var senhas = [];
+        // identifica se deve adicionar uma nova senha ou não
+        // Eh = 1 quando estamos emitindo senhas
+        // Eh = 0 quando estamos cancelando senhas
+        if(add==1){
+            senhas1.push(prefixo1+clic); //adiciona nova entrada
+        }
+        //Identifica se estamos trabalhando com senhas P ou C
+        let flag = prefixo1.localeCompare(prefixo2) 
+        //deve sempre colocar fila de senhas P primeiro
+        if (flag==1){
+                senhas = senhas1.concat(senhas2);
+        }else{
+                senhas = senhas2.concat(senhas1);
+        }
+        //Gera as entradas da lista em HTML
+        senhas.forEach(function(item){
+            nHTML += '<li class="dynamic-color">'+item +'</li>';
+        });
+        document.getElementById("fila").innerHTML = '<ul>'+nHTML+'</ul>'; //printa a fila de Atendimento
+
+    }
+
+
+    botPref.addEventListener('click',()=>{
+        clicP +=1;
+        printFila(clicP,senhasP,senhasC,'P','C',1);
+    });
+
+    botCom.addEventListener('click',()=>{
+        clicC +=1;
+        printFila(clicC,senhasC,senhasP,'C','P',1);
+    });
+
+
+    // ***** CANCELAMENTO DE SENHAS ****** //
+    
+    let customSelect = document.querySelector('#custom-select');
+    botCanc.addEventListener('click',()=>{
+        customSelect.classList.toggle('show'); //mostrar a lista de seleção
+        document.getElementById('selectList').options.length=0; //reseta as opções anteriores
+
+        // atualiza o conteúdo da lista de seleção
+        var senhas = senhasP.concat(senhasC);
+        for(let i=0; i<senhas.length; i++){
+            document.getElementById('selectList').options[i] = new Option(senhas[i]);
+        }
+    });
+
+    let botOk = document.querySelector('.botOk');
+    botOk.addEventListener('click',()=>{
+        customSelect.classList.toggle('show'); //esconde novamente a lista de seleção
+        var selectList = document.getElementById('selectList');
+        // passa pro JS o valor desejado a ser cancelado
+        var cancValue = selectList.options[selectList.selectedIndex].text;
+        //alert(cancValue.length);
+        
+        //varredura na string de senhas p/ localizar e remover entrada desejada
+        for(let i=senhasP.length-1; i>-1; i--){
+            if(cancValue == senhasP[i]){
+                senhasP.splice(i,1); //remove entrada 
+                printFila(clicP,senhasP,senhasC,'P','C',0);
+            }
+        }
+
+        for(let i=senhasC.length-1; i>-1; i--){
+            if(cancValue == senhasC[i]){
+                senhasC.splice(i,1); //remove entrada
+                printFila(clicC,senhasC,senhasP,'C','P',0);
+            }
+        }
+    });
+
+
+    // ***** CONVOCANDO SENHAS ****** //
+
+    botConv.addEventListener('click',()=>{
+        var chamada = [];
+        if(senhasP.length>0){
+            chamada = senhasP[0];
+            senhasP.splice(0,1); //remove entrada 
+            printFila(clicP,senhasP,senhasC,'P','C',0);
+
+        }else if(senhasC.length>0){
+            chamada = senhasC[0];
+            senhasC.splice(0,1); //remove entrada
+            printFila(clicC,senhasC,senhasP,'C','P',0);
+        }
+        document.getElementById("telao").innerHTML 
+            = '<h3> Atendimento para a senha:</h3><h1>'+chamada+'</h1>';
+
+    });
+
+</script>
+
+
+</html>

@@ -1,0 +1,143 @@
+*{
+    font-family: 'Roboto Mono', monospace;
+}
+
+h2,h3{
+    color: white;
+}
+
+body{
+    display: flex;
+    background-color: rgb(17, 4, 69);
+    margin-top: 30px;
+}
+
+.botoes{
+    margin-left: 30px;
+    border: 2px solid white;
+    padding: 30px;
+    width: 20%;
+}
+
+button{
+    margin-bottom: 50px;
+    padding: 20px 20px;
+    cursor: pointer;
+
+    background-color: black;
+    border: none;
+    color: white;
+}
+
+button.senhaCanc{
+    margin-bottom: 5px;
+    border: 3px double rgb(219, 29, 29);
+}
+
+button.botOk{
+    margin-bottom: 5px;
+    padding: 10px 10px;
+}
+
+button.senhaConv{
+    padding: 20px 20px;
+    margin: auto;
+    background-color: blue;
+    border: none;
+    color: white;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#custom-select{
+    margin-bottom: 40px;
+}
+
+#selectList option{
+    background-color: black;
+    color: white;
+}
+
+.select-items,.select-selected {
+    color: #ffffff;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+  }
+  
+
+
+
+.hide{
+    visibility: hidden;
+}
+
+.show{
+    visibility: visible;
+}
+
+
+h2{
+    font-size: 20px;
+}
+
+.filaChamada{
+    text-align: center;
+    border: 2px solid white;
+    padding: 30px;
+    width: 20%;
+    margin-left: 20px;
+}
+
+.filaChamada h2{
+    padding-bottom: 5px;
+    border-bottom: 1.5px solid white;
+}
+
+#fila{
+    text-align: center;
+}
+
+#fila ul{
+    padding-left: 0;
+    list-style: none;
+}
+
+#fila li{
+    margin-bottom: 5px;
+    color: white;
+}
+
+.container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clock{
+    font-size: 25px;
+    width: 50%;
+    text-align: center;
+    border: 2px solid gold;
+    color: gold;
+    padding: 30px;
+}
+
+
+.painelChamada{
+    width: 50%;
+    text-align: center;
+    border: 2px solid white;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+#telao h1{
+    font-size: 50px;
+    color:gold
+}
